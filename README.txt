@@ -46,3 +46,13 @@ Revisar que se ha cargado el dispositivo con:
     * cat /dev/arduino_driver > /dev/ttyACM0
 
 ayuda de: https://www.youtube.com/watch?v=tNnH-YiY_1k&ab_channel=Johannes4GNU_Linux
+
+----- ----- - - -- - -- - --  CLUSTER (Server)-- --- --- - - -- -- - --- - -- -
+
+ * Requerimientos:
+    MPI:
+        > sudo apt install mpi
+
+
+
+----- ----- - - -- - -- - --  CLUSTER (Cliente)-- --- --- - - -- -- - --- - -- -
