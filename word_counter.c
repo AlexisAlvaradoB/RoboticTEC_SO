@@ -206,6 +206,8 @@ int main(){
         }
     }
 
+    
+
     end_time = clock();
 
     cpu_time_used = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;

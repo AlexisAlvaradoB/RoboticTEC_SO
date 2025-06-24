@@ -28,3 +28,19 @@ Revisar que se ha cargado el dispositivo con:
 - Revisar los mensajes que deja en el kernel el driver con printk:
 
     >sudo dmesg | tail
+
+- Permitir enviar a tty:
+
+    >stty -F /dev/ttyACM0 -hupcl
+
+- Ejecución final:
+
+    Poner el driver a estado activo:
+    >sudo insmod module_driver.ko
+    >sudo chmod 666 /dev/arduino_driver
+
+    Enviar palabra con el driver:
+    >stty -F /dev/ttyACM0 -hupcl 
+        ((una vez por conexión de Arduino))
+    >echo "word" /dev/arduino_driver
+    >cat /dev/arduino_driver > /dev/ttyACM0

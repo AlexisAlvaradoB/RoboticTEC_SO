@@ -13,6 +13,7 @@ static dev_t arduino_mod_nr;
 static struct class * arduino_class;
 static struct cdev arduino_mod;
 
+
 #define DRIVER_NAME "arduino_driver"
 #define DRIVER_CLASS "arduinoModClass"
 
