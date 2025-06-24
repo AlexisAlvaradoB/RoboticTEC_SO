@@ -1,0 +1,7 @@
+test: 0.000076 (24)
+quijote: 0.120780 (186965)
+quijote_esteroides = 0.81022 (1308755)
+quijote_final = 1.606678 (2617510)
+
+1589x
+7790n
