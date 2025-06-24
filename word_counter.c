@@ -6,6 +6,11 @@
 #include <stdbool.h>
 #include <time.h>
 
+/**
+ * @brief Valida si es uno de los carácteres especiales para el español (en ASCII)
+ * 
+ * @return true si es válido
+ */
 bool isValidSignedLetter(int code, int * validCodes){
     for(int i = 0; i < 7; i++){
         if(code == validCodes[i] || code == validCodes[i] -32){
@@ -111,9 +116,9 @@ int main(){
                         int listPos = 0;
                         int colocada = 0;
                         while(listPos < letterDictionary->length || colocada == 1){
-                            if(current->length == letterCount){
+                            if(current->length == letterCount){//Solo compara si las palabras son del mismo tamaño
                                 int isEqual = 1;
-                                for(int i = 0; i < letterCount; i++){
+                                for(int i = 0; i < letterCount; i++){//compara letra por letra
                                     if(current->word[i] != wordConstructor[i]){
                                         isEqual = 0;
                                         break;
@@ -136,13 +141,13 @@ int main(){
                                                 letterDictionary->head = current;
                                             }
                                         }
-                                        if(letterDictionary->length > 2){
+                                        if(letterDictionary->length > 2){//para casos donde hay más de dos nodos
                                             int swappingPos = listPos - 1;
                                             WordStruct * checkedNode = current->previousWord;
                                             int needsSwapping = 0;
-                                            while(swappingPos >= 0){
-                                                if(checkedNode->appearences > current->appearences && needsSwapping == 0){
-                                                    break;
+                                            while(swappingPos >= 0){//busca si puede hacer swapping
+                                                if(checkedNode->appearences > current->appearences && needsSwapping == 0){//No lo hace si no vale la pena hacer swapping
+                                                    break;//No vale la pena si no ha sobrepasado a ninguna otra palabra
                                                 }
                                                 if((checkedNode->appearences > current->appearences && needsSwapping == 1)||(checkedNode->appearences <= current->appearences && swappingPos == 0)){
                                                     WordStruct * prevCurr = current->previousWord;
@@ -153,12 +158,12 @@ int main(){
                                                         nextCurr->previousWord = prevCurr;
                                                     }
 
-                                                    if(checkedNode->appearences < current->appearences && swappingPos == 0){
+                                                    if(checkedNode->appearences < current->appearences && swappingPos == 0){//En caso de que esté moviéndose en frente de la lista
                                                         current->previousWord = 0;
                                                         current->nextWord = checkedNode;
                                                         checkedNode->previousWord = current;
                                                         letterDictionary->head = current;
-                                                    }else{
+                                                    }else{//Para cualquier otra posición
                                                         WordStruct * pushed = checkedNode->nextWord;
                                                         current->nextWord = pushed;
                                                         pushed->previousWord = current;
@@ -178,7 +183,7 @@ int main(){
                                     break;
                                 }
                             }
-                            if((current->nextWord == 0) || (listPos == letterDictionary->length - 1)){
+                            if((current->nextWord == 0) || (listPos == letterDictionary->length - 1)){//Si ya no encontró ningún match, cree una al final y termine la búsqueda
                                 struct WordStruct * newWordStruct = createNewWord(wordConstructor, letterCount, current, 0);
                                 current->nextWord = newWordStruct;
                                 letterDictionary->head->previousWord = newWordStruct;
@@ -186,7 +191,7 @@ int main(){
                                 colocada = 1;
                                 wordAppearences++;
                                 break;
-                            }else{
+                            }else{//Continúe buscando un match
                                 current = current->nextWord; 
                             }
                             listPos++;
@@ -196,7 +201,7 @@ int main(){
                 }
             }
         }
-        if(fileText == EOF){
+        if(fileText == EOF){//Revisa si ya terminó al archivo.
             break;
         }
     }

@@ -1,0 +1,1 @@
+savedcmd_/home/alexis/Documents/Tec/SO/RoboticTEC_SO/driver/Module.symvers :=  scripts/mod/modpost -M -m -a      -o /home/alexis/Documents/Tec/SO/RoboticTEC_SO/driver/Module.symvers -T /home/alexis/Documents/Tec/SO/RoboticTEC_SO/driver/modules.order -i Module.symvers -e 

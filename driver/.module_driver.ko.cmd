@@ -1,0 +1,1 @@
+savedcmd_/home/alexis/Documents/Tec/SO/RoboticTEC_SO/driver/module_driver.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/alexis/Documents/Tec/SO/RoboticTEC_SO/driver/module_driver.ko /home/alexis/Documents/Tec/SO/RoboticTEC_SO/driver/module_driver.o /home/alexis/Documents/Tec/SO/RoboticTEC_SO/driver/module_driver.mod.o
