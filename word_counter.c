@@ -206,7 +206,43 @@ int main(){
         }
     }
 
-    
+    WordStruct * mostAppearances = 0;
+
+
+
+    for(int i = 0; i < 26; i++){
+        LetterList * letterDictionary = &dictionary[i];
+        if(letterDictionary->length > 0){
+            if(mostAppearances == 0){
+                mostAppearances = letterDictionary->head;
+            }else{
+                if(mostAppearances->appearences < letterDictionary->head->appearences){
+                    mostAppearances = letterDictionary->head;
+                }
+            }
+        }
+    }
+
+    if(mostAppearances != 0){
+        printWordStruct(mostAppearances);
+        system("stty -F /dev/ttyACM0 -hupcl");
+        int length_command = mostAppearances->length + 29;
+        char * command_base = "echo \"\" > /dev/arduino_driver";
+        char echoOut [length_command];
+        for(int i = 0; i < length_command; i++){
+            if(i <= 5 || i >=mostAppearances->length + 6){
+                if(i >= mostAppearances->length + 5){
+                    echoOut[i] = command_base[i-mostAppearances->length];
+                }else{
+                    echoOut[i] = command_base[i];
+                }
+            }else{
+                echoOut[i] = mostAppearances->word[i-6];
+            }
+        }
+        system(&echoOut);
+        system("cat /dev/arduino_driver > /dev/ttyACM0");
+    }
 
     end_time = clock();
 

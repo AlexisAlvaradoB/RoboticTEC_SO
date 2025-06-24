@@ -40,7 +40,9 @@ Revisar que se ha cargado el dispositivo con:
     >sudo chmod 666 /dev/arduino_driver
 
     Enviar palabra con el driver:
-    >stty -F /dev/ttyACM0 -hupcl 
+    * stty -F /dev/ttyACM0 -hupcl 
         ((una vez por conexión de Arduino))
-    >echo "word" /dev/arduino_driver
-    >cat /dev/arduino_driver > /dev/ttyACM0
+    * echo "word" > /dev/arduino_driver
+    * cat /dev/arduino_driver > /dev/ttyACM0
+
+ayuda de: https://www.youtube.com/watch?v=tNnH-YiY_1k&ab_channel=Johannes4GNU_Linux
