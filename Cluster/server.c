@@ -241,6 +241,24 @@ void getMostRepeated(NodoTexto * listaNodos){
     
     printWordStruct(mostFrequent);
 
+    system("stty -F /dev/ttyACM0 -hupcl");
+    int length_command = mostFrequent->length + 29;
+    char * command_base = "echo \"\" > /dev/arduino_driver";
+    char echoOut [length_command];
+    for(int i = 0; i < length_command; i++){
+        if(i <= 5 || i >=mostFrequent->length + 6){
+            if(i >= mostFrequent->length + 5){
+                echoOut[i] = command_base[i-mostFrequent->length];
+            }else{
+                echoOut[i] = command_base[i];
+            }
+        }else{
+            echoOut[i] = mostFrequent->word[i-6];
+        }
+    }
+    system(echoOut);
+    system("cat /dev/arduino_driver > /dev/ttyACM0");
+
     for(int i = 0; i < 26; i++){
         freeLetterList(&finalList[i]);
     }
