@@ -90,6 +90,7 @@ int main(int argc, char * argv[]){
     printf("Resultados enviados al servidor principal\n");
 
     for(int i = 0; i < 26; i++){
+        printLetterList(&dictionary[i]);
         freeLetterList(&dictionary[i]);
     }
 

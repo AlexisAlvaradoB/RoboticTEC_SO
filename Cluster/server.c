@@ -26,6 +26,7 @@ typedef struct NodoTexto
     LetterList * diccionario;
 } NodoTexto;
 
+ NodoTexto * listaNodos;
 
 bool isValidSignedLetter(int code, int * validCodes){
     for(int i = 0; i < 7; i++){
@@ -155,15 +156,15 @@ void * processText(void * arg){
                     WordStruct * wordStr = createNewWord(word, wordLength, previous, 0);
                     wordStr->appearences = appears;
                     previous->nextWord = wordStr;
+                    previous = wordStr;
                 }
+                (dictionary[i].length)++;
             }
         }
     }
     
-    for(int i = 0; i < 26; i++){
-        freeLetterList(&dictionary[i]);
-    }
-
+    
+    nodo->diccionario = dictionary;
 
     printf("Cliente del puerto %d completó su proceso\n", nodo->puerto);
 
@@ -183,6 +184,68 @@ char * getFullTextToProcess(FILE * file, long start, long end){
     return message;
 }
 
+void getMostRepeated(NodoTexto * listaNodos){
+    struct WordStruct * mostFrequent = (WordStruct *) malloc(sizeof(WordStruct));
+    mostFrequent->appearences = 0;
+    struct LetterList * finalList = (LetterList *)malloc(sizeof(LetterList) *26);
+    
+    for(int letra = 0; letra < 26; letra++){
+        struct LetterList * finalLetterList = &finalList[letra];
+        finalLetterList->head = 0;
+        finalLetterList->length = 0;
+        struct WordStruct * previous = 0;
+        for(int core = 0; core < NODOS; core++){
+            struct LetterList * coreLetterList = &listaNodos[core].diccionario[letra];
+            if(coreLetterList->length > 0){
+                struct WordStruct * temp = coreLetterList->head;
+                if(finalLetterList->length > 0){
+                    struct WordStruct * found = findStruct(finalLetterList, temp->word, temp->length);
+                    if(found ==NULL){
+                        struct WordStruct * newLetterInTown = createNewWord(temp->word, temp->length, previous, 0);
+                        previous->nextWord = newLetterInTown;
+                        newLetterInTown->appearences = temp->appearences;
+                        newLetterInTown->length = temp->length;
+                        if(newLetterInTown->appearences >= mostFrequent->appearences){
+                            mostFrequent->appearences = newLetterInTown->appearences;
+                            mostFrequent->word = newLetterInTown->word;
+                        }
+                        previous = newLetterInTown;
+                        (finalLetterList->length)++;
+                    }else{
+                        found->appearences += temp->appearences;
+                        if(found->appearences >= mostFrequent->appearences){
+                            mostFrequent->appearences = found->appearences;
+                            mostFrequent->word = found->word;
+                            mostFrequent->length = found->length;
+                        }
+                    }
+                }else if(finalLetterList->length == 0){
+                    struct WordStruct * newLetterInTown = createNewWord(temp->word, temp->length, 0, 0);
+                    previous = newLetterInTown;
+                    newLetterInTown->appearences = temp->appearences;
+                    newLetterInTown->length = temp->length;
+                    if(mostFrequent->appearences < newLetterInTown->appearences){
+                        mostFrequent->appearences = newLetterInTown->appearences;
+                        mostFrequent->word = newLetterInTown->word;
+                        mostFrequent->length = newLetterInTown->length;
+                    }
+                    finalLetterList->length = 1;
+                    finalLetterList->head = newLetterInTown;
+                }
+                
+            }
+        }
+    }
+
+    printf("Palabra más frecuente: \n");
+    
+    printWordStruct(mostFrequent);
+
+    for(int i = 0; i < 26; i++){
+        freeLetterList(&finalList[i]);
+    }
+}
+
 int main(int argc, char**argv){
     
     FILE * fp = fopen("../el_quijote.txt", "r");
@@ -190,7 +253,7 @@ int main(int argc, char**argv){
         long * limits = divideFile(fsize(fp), fp);
 
         int puertos[] = {PUERTO_A, PUERTO_B, PUERTO_C, PUERTO_D};
-        NodoTexto * listaNodos = (NodoTexto *)malloc(sizeof(NodoTexto)*NODOS);
+        listaNodos = (NodoTexto *)malloc(sizeof(NodoTexto)*NODOS);
         for(int i = 0; i < NODOS; i++){
             listaNodos[i].puerto = puertos[i];
             if(i == 0){
@@ -215,11 +278,17 @@ int main(int argc, char**argv){
             pthread_join(threads[i], NULL);
         }
 
+        
 
+        
+        getMostRepeated(listaNodos);
 
         //Para cuando finaliza, libera las cosas
         for(int i = 0; i < NODOS; i++){
             free(listaNodos[i].text);
+            for(int j = 0; j < 26; j++){
+                freeLetterList(&listaNodos[i].diccionario[j]);
+            }
         }
         free(listaNodos);
         free(limits);

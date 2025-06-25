@@ -91,7 +91,6 @@ void printWordStruct(struct WordStruct * wordStruct){
  * @param wordStruct estructura a liberar
  */
 void freeWordStruct(struct WordStruct * wordStruct){
-    int len = wordStruct->length;
     free(wordStruct->word);
 }
 
@@ -132,3 +131,41 @@ void freeLetterList(LetterList * letterList){
         }
     }
 }
+
+int compareStrings(char * w1, int lenW1, char * w2, int lenW2){
+    if(lenW1 == lenW2){
+        for(int i = 0; i < lenW1; i++){
+            if(w1[i] != w2[i]){
+                return 0;
+            }
+        }
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+
+struct WordStruct * findStruct(LetterList * list, char * word, int len){
+    if(list->length > 0){
+        struct WordStruct * curr = list->head;
+        int pos = 0;
+        while(pos < list->length){
+            if(compareStrings(word, len, curr->word, curr->length) == 1){
+                return curr;
+            }else{
+                curr = curr->nextWord;
+                if(curr == NULL){
+                    return NULL;
+                }
+            }
+            pos++;
+        }
+        return NULL;
+    }else{
+        return NULL;
+    }
+    return NULL;
+}
+
+
